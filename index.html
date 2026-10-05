@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>📍 တည်နေရာမျှဝေခြင်း</title>
-<!-- Leaflet CDN - အတည်ပြုလမ်းကြောင်း -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -57,7 +56,51 @@ h1{font-size:24px;font-weight:bold;color:#FFD700;margin-bottom:8px}
   box-shadow:0 0 20px rgba(0,255,200,.3);
 }
 
-/* မြေပုံအကွက် - အတိအကျသတ်မှတ် */
+/* 🔗 လင့်အကွက် - အထူးပြုပြင် */
+.link-box{
+  margin-top:20px;
+  padding:16px;
+  background:rgba(255,215,0,.1);
+  border:2px solid rgba(255,215,0,.3);
+  border-radius:16px;
+  display:none;
+}
+.link-label{font-size:14px;color:#FFD700;margin-bottom:10px;font-weight:bold}
+.link-input{
+  width:100%;
+  padding:14px;
+  background:#000;
+  border:1px solid rgba(255,215,0,.3);
+  border-radius:12px;
+  color:#fff;
+  font-size:14px;
+  outline:none;
+  margin-bottom:12px;
+}
+.btn-copy{
+  width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,#FFD700,#FFB300);
+  color:#000;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+.btn-copy:active{transform:scale(.97)}
+.copy-success{
+  margin-top:10px;
+  padding:12px;
+  background:rgba(0,255,100,.1);
+  border:1px solid rgba(0,255,100,.3);
+  border-radius:10px;
+  color:#00FF64;
+  text-align:center;
+  font-weight:bold;
+  display:none;
+}
+
 #map{
   width:100%;
   height:350px;
@@ -65,41 +108,7 @@ h1{font-size:24px;font-weight:bold;color:#FFD700;margin-bottom:8px}
   margin:20px 0;
   display:none;
   border:2px solid rgba(255,255,255,.08);
-  background:#1a1a2e;
 }
-
-.link-bar{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:16px;
-  padding:6px;
-  background:rgba(255,215,0,.08);
-  border:2px solid rgba(255,215,0,.25);
-  border-radius:14px;
-  display:none;
-}
-.link-input{
-  flex:1;
-  padding:14px 16px;
-  background:transparent;
-  border:none;
-  color:#fff;
-  font-size:14px;
-  outline:none;
-}
-.status-btn{
-  padding:14px 16px;
-  border:none;
-  border-radius:10px;
-  font-size:14px;
-  font-weight:bold;
-  cursor:pointer;
-  white-space:nowrap;
-}
-.not-copied{background:#444;color:#ccc}
-.copied{background:linear-gradient(135deg,#00E676,#00C853);color:#000}
-.copy-manual{background:linear-gradient(135deg,#FFD700,#FFB300);color:#000}
 
 .perm-box{
   background:rgba(0,255,200,.04);
@@ -108,7 +117,6 @@ h1{font-size:24px;font-weight:bold;color:#FFD700;margin-bottom:8px}
   padding:20px;
   margin:16px 0;
   display:none;
-  text-align:left;
 }
 .perm-title{font-weight:bold;font-size:16px;color:#00FFC8;margin-bottom:12px;text-align:center}
 .perm-step{font-size:15px;color:#ddd;margin:10px 0;line-height:1.8}
@@ -146,6 +154,7 @@ h1{font-size:24px;font-weight:bold;color:#FFD700;margin-bottom:8px}
 .loc-label{font-size:13px;color:#7A849E;margin-bottom:4px}
 .loc-name{font-weight:bold;font-size:16px}
 .loc-coor{font-size:13px;color:#9AA4C0;margin-top:4px}
+.you{background:rgba(0,217,255,.05);border-left-color:#00D9FF}
 .dist-box{
   background:rgba(255,107,53,.06);
   border:1px solid rgba(255,107,53,.2);
@@ -156,7 +165,7 @@ h1{font-size:24px;font-weight:bold;color:#FFD700;margin-bottom:8px}
 }
 .dist-label{font-size:13px;color:#FFB088}
 .dist-value{font-size:22px;font-weight:bold;color:#FF6B35;margin-top:4px}
-.footer-note{font-size:13px;color:#5A6482;text-align:center;margin-top:20px}
+.footer-note{font-size:13px;color:#5A6482;text-align:center;margin-top:20px;line-height:1.6}
 .hide{display:none!important}
 </style>
 </head>
@@ -165,7 +174,7 @@ h1{font-size:24px;font-weight:bold;color:#FFD700;margin-bottom:8px}
   <div class="header">
     <div class="badge">✨ အဆင်ပြေပြီ</div>
     <h1>တည်နေရာဖလှယ်ခြင်း</h1>
-    <p class="subtitle">နှိပ်ရုံနဲ့ လင့်အလိုအလျောက်ကူးပေးမည်</p>
+    <p class="subtitle">လင့်ကို တစ်ချက်နှိပ်ရုံနဲ့ ကူးယူနိုင်ပြီ</p>
   </div>
 
   <div class="card">
@@ -174,15 +183,18 @@ h1{font-size:24px;font-weight:bold;color:#FFD700;margin-bottom:8px}
     <div id="permGuide" class="perm-box hide">
       <div class="perm-title">📍 တည်နေရာရယူရန်</div>
       <div class="perm-step">၁️⃣ ဖုန်းရဲ့ <b>GPS / တည်နေရာဝန်ဆောင်မှု</b> ကို ဖွင့်ပါ</div>
-      <div class="perm-step">၂️⃣ အပေါ်ပေါ်လာတဲ့ မေးခွန်းထဲက <b>"ခွင့်ပြုပါ"</b> ကို နှိပ်ပါ</div>
-      <div class="perm-step">၃️⃣ လင့်အလိုအလျောက်ပေါ်လာပြီး <b>အလိုအလျောက်ကူးပေးမည်</b> ✅</div>
+      <div class="perm-step">၂️⃣ ပေါ်လာတဲ့မေးခွန်းထဲက <b>"ခွင့်ပြုပါ"</b> ကို နှိပ်ပါ</div>
+      <div class="perm-step">၃️⃣ လင့်ပေါ်လာမည် → <b>"လင့်ကူးယူမည်"</b> ကိုနှိပ်ပါ ✅</div>
       <div id="errorMsg" class="error-text"></div>
       <button id="retryBtn" class="btn-retry" onclick="shareNow()">🔄 ထပ်မံကြိုးစားမည်</button>
     </div>
 
-    <div id="linkBar" class="link-bar">
-      <input id="linkText" class="link-input" readonly>
-      <button id="statusBtn" class="status-btn not-copied" onclick="manualCopy()">မကူးရသေး</button>
+    <!-- 🔗 လင့်အကွက် - ပြုပြင်ပြီး -->
+    <div id="linkBox" class="link-box">
+      <div class="link-label">👇 သင့်မျှဝေရန်လင့်</div>
+      <input id="linkInput" class="link-input" readonly>
+      <button id="copyBtn" class="btn-copy" onclick="copyLink()">📋 လင့်ကူးယူမည်</button>
+      <div id="successMsg" class="copy-success">✅ ကူးယူပြီးပါပြီ! သူ့ထံပို့လိုက်ပါ</div>
     </div>
 
     <div id="map"></div>
@@ -193,7 +205,7 @@ h1{font-size:24px;font-weight:bold;color:#FFD700;margin-bottom:8px}
       <div class="loc-coor" id="myCo"></div>
     </div>
 
-    <div id="urCard" class="loc-card hide" style="border-left-color:#00D9FF;background:rgba(0,217,255,.05)">
+    <div id="urCard" class="loc-card you hide">
       <div class="loc-label">🔵 သူ၏တည်နေရာ</div>
       <div class="loc-name" id="urName"></div>
       <div class="loc-coor" id="urCo"></div>
@@ -235,8 +247,7 @@ window.onload=function(){
   if(sMe){
     my=sMe;
     showMy();
-    showLinkBar();
-    updateStatus('copied');
+    showLinkBox();
   }
 };
 
@@ -245,15 +256,16 @@ async function shareNow(){
   const guide=document.getElementById('permGuide');
   const err=document.getElementById('errorMsg');
   const retry=document.getElementById('retryBtn');
-  const linkBar=document.getElementById('linkBar');
+  const linkBox=document.getElementById('linkBox');
+  const successMsg=document.getElementById('successMsg');
 
   btn.disabled=true;
   btn.innerText='စောင့်ပါ...';
   guide.classList.remove('hide');
   err.classList.add('hide');
   retry.classList.add('hide');
-  linkBar.classList.add('hide');
-  updateStatus('pending');
+  linkBox.classList.add('hide');
+  successMsg.classList.add('hide');
 
   if(!navigator.geolocation){
     err.innerText='❌ သင့်ဖုန်းက တည်နေရာမထောက်ပံ့ပါ။ Chrome သို့မဟုတ် Safari ဖြင့် ကြိုးစားပါ။';
@@ -300,48 +312,45 @@ async function shareNow(){
 function genLink(name=''){
   const base=location.href.split('?')[0];
   const fullLink=`${base}?lat=${my.la}&lon=${my.lo}${name?'&place='+encodeURIComponent(name):''}`;
-  document.getElementById('linkText').value=fullLink;
-  showLinkBar();
-  autoCopy(fullLink);
+  document.getElementById('linkInput').value=fullLink;
+  showLinkBox();
 }
 
-function showLinkBar(){
-  document.getElementById('linkBar').classList.remove('hide');
+function showLinkBox(){
+  document.getElementById('linkBox').classList.remove('hide');
 }
 
-async function autoCopy(text){
+// ✅ ကူးယူခြင်း - နည်းလမ်းအမျိုးမျိုးဖြင့် ကြိုးစား
+async function copyLink(){
+  const input=document.getElementById('linkInput');
+  const successMsg=document.getElementById('successMsg');
+  const text=input.value;
+
+  successMsg.classList.add('hide');
+
+  // နည်းလမ်း ၁ - Clipboard API
   try{
     await navigator.clipboard.writeText(text);
-    updateStatus('copied');
-  }catch(e){
-    updateStatus('manual');
-  }
-}
+    successMsg.classList.remove('hide');
+    setTimeout(()=>successMsg.classList.add('hide'), 3000);
+    return;
+  }catch(e){}
 
-function updateStatus(state){
-  const btn=document.getElementById('statusBtn');
-  btn.classList.remove('not-copied','copied','copy-manual');
-  if(state==='copied'){
-    btn.classList.add('copied');
-    btn.innerText='✅ ကူးပြီး';
-  }else if(state==='manual'){
-    btn.classList.add('copy-manual');
-    btn.innerText='📋 ကူးယူပါ';
-  }else{
-    btn.classList.add('not-copied');
-    btn.innerText='မကူးရသေး';
-  }
-}
-
-async function manualCopy(){
-  const text=document.getElementById('linkText').value;
+  // နည်းလမ်း ၂ - အလိုအလျောက်ရွေးပေးပြီး ကူးခိုင်း
   try{
-    await navigator.clipboard.writeText(text);
-    updateStatus('copied');
-  }catch(e){
-    document.getElementById('linkText').select();
-    alert('ကူးယူပါ- '+text);
-  }
+    input.select();
+    input.setSelectionRange(0, input.value.length);
+    const copied=document.execCommand('copy');
+    if(copied){
+      successMsg.classList.remove('hide');
+      setTimeout(()=>successMsg.classList.add('hide'), 3000);
+      return;
+    }
+  }catch(e){}
+
+  // နည်းလမ်း ၃ - ကိုယ်တိုင်ကူးခိုင်း
+  input.select();
+  alert('လင့်ကို အောက်ကနေ်ကူးယူပါ- \n\n'+text);
 }
 
 async function fetchName(la, lo, who){
@@ -378,7 +387,7 @@ function renderMap(both){
       const centerLon=my.lo||ur.lo||96.0;
       map=L.map('map').setView([centerLat, centerLon], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-        attribution:'© OpenStreetMap contributors',
+        attribution:'© OpenStreetMap',
         maxZoom:19
       }).addTo(map);
       mapReady=true;
@@ -387,19 +396,13 @@ function renderMap(both){
     map.eachLayer(layer=>{ if(layer instanceof L.Marker || layer instanceof L.Polyline) map.removeLayer(layer); });
 
     if(my.la){
-      L.marker([my.la, my.lo], {icon:L.divIcon({
-        html:'<div style="background:#00FFC8;width:24px;height:24px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px rgba(0,255,200,.5)"></div>',
-        className:'', iconSize:[24,24], iconAnchor:[12,12]
-      })}).addTo(map).bindPopup('ကျွန်ုပ်');
+      L.marker([my.la, my.lo]).addTo(map).bindPopup('ကျွန်ုပ်');
       map.setView([my.la, my.lo], 13);
     }
 
     if(both && ur.la){
-      L.marker([ur.la, ur.lo], {icon:L.divIcon({
-        html:'<div style="background:#00BFFF;width:24px;height:24px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px rgba(0,191,255,.5)"></div>',
-        className:'', iconSize:[24,24], iconAnchor:[12,12]
-      })}).addTo(map).bindPopup('သူ့နေရာ');
-      L.polyline([[my.la,my.lo],[ur.la,ur.lo]], {color:'#FF6B35', weight:4, opacity:.8}).addTo(map);
+      L.marker([ur.la, ur.lo]).addTo(map).bindPopup('သူ့နေရာ');
+      L.polyline([[my.la,my.lo],[ur.la,ur.lo]], {color:'#FF6B35', weight:4}).addTo(map);
       map.fitBounds([[my.la,my.lo],[ur.la,ur.lo]], {padding:[30,30]});
       calcDist();
     }
