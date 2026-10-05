@@ -4,74 +4,166 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>📍 တည်နေရာမျှဝေခြင်း</title>
-<!-- Leaflet CDN အတည်ပြုလမ်းကြောင်း -->
+<!-- Leaflet CDN - အတည်ပြုလမ်းကြောင်း -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700;900&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Noto Sans Myanmar',sans-serif}
-:root{
-  --gold:linear-gradient(135deg,#FFD700 0%,#FFB300 50%,#FF9500 100%);
-  --teal:linear-gradient(135deg,#00FFC8 0%,#00E5B0 50%,#00CC99 100%);
-  --blue:linear-gradient(135deg,#00D9FF 0%,#00BFFF 50%,#0099E5 100%);
-  --red:linear-gradient(135deg,#FF5252 0%,#FF3838 50%,#E52E2E 100%);
-  --green:linear-gradient(135deg,#00E676 0%,#00C853 50%,#00A843 100%);
-  --bg-main:#050816;--card-bg:#0F1429;
-  --glow-teal:0 0 20px rgba(0,255,200,.4),0 4px 20px rgba(0,204,153,.3);
-  --glow-gold:0 0 20px rgba(255,215,0,.4),0 4px 20px rgba(255,149,0,.3);
-  --glow-green:0 0 20px rgba(0,230,118,.4),0 4px 20px rgba(0,168,67,.3);
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:#050816;
+  color:#fff;
+  min-height:100vh;
+  padding:20px 16px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 }
-body{background:var(--bg-main);color:#fff;min-height:100vh;padding:20px 16px}
 .container{max-width:520px;margin:0 auto}
 .header{text-align:center;margin-bottom:24px}
-.badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(90deg,rgba(255,215,0,.18),rgba(255,149,0,.12));color:#FFD700;padding:8px 20px;border-radius:50px;font-size:13px;font-weight:700;margin-bottom:10px;border:1px solid rgba(255,215,0,.3)}
-h1{font-size:22px;font-weight:900;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.subtitle{color:#8A94B8;font-size:14px;margin-top:6px}
-.card{background:var(--card-bg);border-radius:24px;padding:24px 20px;border:1px solid rgba(255,255,255,.08)}
+.badge{
+  display:inline-block;
+  background:linear-gradient(90deg,rgba(255,215,0,.2),rgba(255,149,0,.1));
+  color:#FFD700;
+  padding:8px 20px;
+  border-radius:50px;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:10px;
+  border:1px solid rgba(255,215,0,.3);
+}
+h1{font-size:24px;font-weight:bold;color:#FFD700;margin-bottom:8px}
+.subtitle{color:#8A94B8;font-size:14px}
+.card{
+  background:#0F1429;
+  border-radius:24px;
+  padding:24px 20px;
+  border:1px solid rgba(255,255,255,.08);
+}
 
-.btn{width:100%;padding:20px;border:none;border-radius:16px;font-size:18px;font-weight:800;cursor:pointer;transition:all .2s ease}
+.btn{
+  width:100%;
+  padding:20px;
+  border:none;
+  border-radius:16px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:all .2s;
+}
 .btn:active{transform:scale(.97)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.btn-share{background:var(--teal);color:#000;box-shadow:var(--glow-teal);border:2px solid rgba(0,255,200,.3);font-size:19px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-share{
+  background:linear-gradient(135deg,#00FFC8,#00CC99);
+  color:#000;
+  font-size:20px;
+  box-shadow:0 0 20px rgba(0,255,200,.3);
+}
 
-/* မြေပုံအကွက် - အမြင့်အတိအကျသတ်မှတ် */
-#map{width:100%;height:350px;border-radius:16px;margin:16px 0;display:none;border:2px solid rgba(255,255,255,.08);position:relative;z-index:1}
+/* မြေပုံအကွက် - အတိအကျသတ်မှတ် */
+#map{
+  width:100%;
+  height:350px;
+  border-radius:16px;
+  margin:20px 0;
+  display:none;
+  border:2px solid rgba(255,255,255,.08);
+  background:#1a1a2e;
+}
 
-.link-bar{display:flex;align-items:center;gap:8px;margin-top:16px;padding:4px;background:rgba(255,215,0,.08);border:2px solid rgba(255,215,0,.25);border-radius:14px;display:none}
-.link-input{flex:1;padding:14px 16px;background:transparent;border:none;color:#fff;font-size:13px;outline:none}
-.status-btn{padding:14px 14px;border:none;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap;transition:all .2s ease}
-.status-btn:active{transform:scale(.96)}
+.link-bar{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:16px;
+  padding:6px;
+  background:rgba(255,215,0,.08);
+  border:2px solid rgba(255,215,0,.25);
+  border-radius:14px;
+  display:none;
+}
+.link-input{
+  flex:1;
+  padding:14px 16px;
+  background:transparent;
+  border:none;
+  color:#fff;
+  font-size:14px;
+  outline:none;
+}
+.status-btn{
+  padding:14px 16px;
+  border:none;
+  border-radius:10px;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  white-space:nowrap;
+}
 .not-copied{background:#444;color:#ccc}
-.copied{background:var(--green);color:#000;box-shadow:var(--glow-green)}
-.copy-manual{background:var(--gold);color:#000;box-shadow:var(--glow-gold)}
+.copied{background:linear-gradient(135deg,#00E676,#00C853);color:#000}
+.copy-manual{background:linear-gradient(135deg,#FFD700,#FFB300);color:#000}
 
-.perm-box{background:rgba(0,255,200,.04);border:1px solid rgba(0,255,200,.2);border-radius:16px;padding:20px;margin:16px 0;display:none;text-align:center}
-.perm-icon{font-size:40px;margin-bottom:8px}
-.perm-title{font-weight:800;font-size:16px;margin-bottom:12px;color:#00FFC8}
-.perm-steps{text-align:left;line-height:2;padding-left:4px;margin-bottom:8px}
-.perm-step{font-size:14px;color:#E8E8E8}
-.perm-step b{color:#00FFC8}
-.error-text{color:#FF6B6B;font-size:13px;margin-top:12px;padding:12px;background:rgba(255,82,82,.06);border-radius:10px;display:none}
-.btn-retry{background:var(--red);color:#fff;border:none;border-radius:12px;padding:12px 20px;font-size:14px;font-weight:700;cursor:pointer;margin-top:12px;display:none}
+.perm-box{
+  background:rgba(0,255,200,.04);
+  border:1px solid rgba(0,255,200,.2);
+  border-radius:16px;
+  padding:20px;
+  margin:16px 0;
+  display:none;
+  text-align:left;
+}
+.perm-title{font-weight:bold;font-size:16px;color:#00FFC8;margin-bottom:12px;text-align:center}
+.perm-step{font-size:15px;color:#ddd;margin:10px 0;line-height:1.8}
+.error-text{
+  color:#FF6B6B;
+  font-size:14px;
+  margin-top:12px;
+  padding:12px;
+  background:rgba(255,82,82,.06);
+  border-radius:10px;
+  display:none;
+  line-height:1.6;
+}
+.btn-retry{
+  background:linear-gradient(135deg,#FF5252,#E52E2E);
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  padding:12px 20px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:12px;
+  display:none;
+}
 
-.loc-card{padding:16px;border-radius:12px;margin:12px 0;display:none;animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.me{background:rgba(0,255,200,.06);border-left:3px solid #00FFC8}
-.you{background:rgba(0,217,255,.06);border-left:3px solid #00D9FF}
-.loc-label{font-size:12px;color:#7A849E;margin-bottom:4px;font-weight:600}
-.loc-name{font-weight:700;font-size:15px}
-.loc-coor{font-size:12px;color:#9AA4C0;margin-top:4px}
-.dist-box{background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.18);border-radius:12px;padding:16px;margin:14px 0;display:none}
-.dist-label{font-size:12px;color:#FFB088;font-weight:600}
-.dist-value{font-size:20px;font-weight:900;color:#FF6B35;margin-top:4px}
-.footer-note{font-size:12px;color:#5A6482;text-align:center;margin-top:20px;line-height:1.6}
+.loc-card{
+  padding:16px;
+  border-radius:12px;
+  margin:12px 0;
+  display:none;
+  background:rgba(0,255,200,.05);
+  border-left:3px solid #00FFC8;
+}
+.loc-label{font-size:13px;color:#7A849E;margin-bottom:4px}
+.loc-name{font-weight:bold;font-size:16px}
+.loc-coor{font-size:13px;color:#9AA4C0;margin-top:4px}
+.dist-box{
+  background:rgba(255,107,53,.06);
+  border:1px solid rgba(255,107,53,.2);
+  border-radius:12px;
+  padding:16px;
+  margin:14px 0;
+  display:none;
+}
+.dist-label{font-size:13px;color:#FFB088}
+.dist-value{font-size:22px;font-weight:bold;color:#FF6B35;margin-top:4px}
+.footer-note{font-size:13px;color:#5A6482;text-align:center;margin-top:20px}
 .hide{display:none!important}
 </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
-    <div class="badge">✨ အဆင့်မြင့်ဗားရှင်း</div>
+    <div class="badge">✨ အဆင်ပြေပြီ</div>
     <h1>တည်နေရာဖလှယ်ခြင်း</h1>
     <p class="subtitle">နှိပ်ရုံနဲ့ လင့်အလိုအလျောက်ကူးပေးမည်</p>
   </div>
@@ -80,13 +172,10 @@ h1{font-size:22px;font-weight:900;background:var(--gold);-webkit-background-clip
     <button id="shareBtn" class="btn btn-share" onclick="shareNow()">⚡ ကျွန်ုပ်နေရာ အမြန်မျှဝေမယ်</button>
 
     <div id="permGuide" class="perm-box hide">
-      <div class="perm-icon">📍</div>
-      <div class="perm-title">တည်နေရာရယူရန်</div>
-      <div class="perm-steps">
-        <div class="perm-step">၁️⃣ ဖုန်းရဲ့ <b>GPS / တည်နေရာ</b> ကို ဖွင့်ပါ</div>
-        <div class="perm-step">၂️⃣ ပေါ်လာတဲ့မေးခွန်းထဲက <b>"ခွင့်ပြုပါ"</b> ကိုနှိပ်ပါ</div>
-        <div class="perm-step">၃️⃣ လင့်အလိုအလျောက်ပေါ်လာပြီး <b>အလိုအလျောက်ကူးပေးမည်</b> ✅</div>
-      </div>
+      <div class="perm-title">📍 တည်နေရာရယူရန်</div>
+      <div class="perm-step">၁️⃣ ဖုန်းရဲ့ <b>GPS / တည်နေရာဝန်ဆောင်မှု</b> ကို ဖွင့်ပါ</div>
+      <div class="perm-step">၂️⃣ အပေါ်ပေါ်လာတဲ့ မေးခွန်းထဲက <b>"ခွင့်ပြုပါ"</b> ကို နှိပ်ပါ</div>
+      <div class="perm-step">၃️⃣ လင့်အလိုအလျောက်ပေါ်လာပြီး <b>အလိုအလျောက်ကူးပေးမည်</b> ✅</div>
       <div id="errorMsg" class="error-text"></div>
       <button id="retryBtn" class="btn-retry" onclick="shareNow()">🔄 ထပ်မံကြိုးစားမည်</button>
     </div>
@@ -98,14 +187,14 @@ h1{font-size:22px;font-weight:900;background:var(--gold);-webkit-background-clip
 
     <div id="map"></div>
 
-    <div id="myCard" class="loc-card me hide">
-      <div class="loc-label">🟢 ကျွန်ုပ်</div>
+    <div id="myCard" class="loc-card hide">
+      <div class="loc-label">🟢 ကျွန်ုပ်၏တည်နေရာ</div>
       <div class="loc-name" id="myName"></div>
       <div class="loc-coor" id="myCo"></div>
     </div>
 
-    <div id="urCard" class="loc-card you hide">
-      <div class="loc-label">🔵 သူ့နေရာ</div>
+    <div id="urCard" class="loc-card hide" style="border-left-color:#00D9FF;background:rgba(0,217,255,.05)">
+      <div class="loc-label">🔵 သူ၏တည်နေရာ</div>
       <div class="loc-name" id="urName"></div>
       <div class="loc-coor" id="urCo"></div>
     </div>
@@ -115,35 +204,40 @@ h1{font-size:22px;font-weight:900;background:var(--gold);-webkit-background-clip
       <div class="dist-value" id="distValue"></div>
     </div>
 
-    <p class="footer-note">💡 လင့်ကူးပြီးပါက မိတ်ဆွေထံပေးပို့ပါ</p>
+    <p class="footer-note">💡 လင့်ကူးပြီးပါက မိတ်ဆွေထံ ပေးပို့လိုက်ပါ</p>
   </div>
 </div>
 
 <script>
-let map,my={},ur={},mapReady=false;
-const STORAGE={ME:'loc_me',UR:'loc_ur'};
+let map, my={}, ur={}, mapReady=false;
+const STORAGE={ME:'loc_me', UR:'loc_ur'};
 
 function saveData(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 function loadData(k){try{const d=localStorage.getItem(k);return d?JSON.parse(d):null}catch(e){return null}}
 
-window.onload=()=>{
+window.onload=function(){
   const p=new URLSearchParams(location.search);
-  const la=p.get('lat')?+p.get('lat'):null;
-  const lo=p.get('lon')?+p.get('lon'):null;
+  const la=p.get('lat')?parseFloat(p.get('lat')):null;
+  const lo=p.get('lon')?parseFloat(p.get('lon')):null;
   const nm=p.get('place');
 
-  if(la&&lo){
-    ur={la,lo,name:nm};
-    saveData(STORAGE.UR,ur);
+  if(la && lo){
+    ur={la:la, lo:lo, name:nm};
+    saveData(STORAGE.UR, ur);
     showUr();
-    if(!nm)fetchName(la,lo,'ur');
-  }else{
+    if(!nm) fetchName(la, lo, 'ur');
+  } else {
     const sUr=loadData(STORAGE.UR);
-    if(sUr){ur=sUr;showUr();if(!sUr.name)fetchName(sUr.la,sUr.lo,'ur')}
+    if(sUr){ ur=sUr; showUr(); if(!sUr.name) fetchName(sUr.la, sUr.lo, 'ur'); }
   }
 
   const sMe=loadData(STORAGE.ME);
-  if(sMe){my=sMe;showMy(true);showLinkBar();updateStatus('copied')}
+  if(sMe){
+    my=sMe;
+    showMy();
+    showLinkBar();
+    updateStatus('copied');
+  }
 };
 
 async function shareNow(){
@@ -162,7 +256,7 @@ async function shareNow(){
   updateStatus('pending');
 
   if(!navigator.geolocation){
-    err.innerText='❌ သင့်ဖုန်းက တည်နေရာမထောက်ပံ့ပါ။ Chrome/Safari ဖြင့် ကြိုးစားပါ။';
+    err.innerText='❌ သင့်ဖုန်းက တည်နေရာမထောက်ပံ့ပါ။ Chrome သို့မဟုတ် Safari ဖြင့် ကြိုးစားပါ။';
     err.classList.remove('hide');
     retry.classList.remove('hide');
     btn.disabled=false;
@@ -171,23 +265,28 @@ async function shareNow(){
   }
 
   try{
-    const pos=await new Promise((ok,no)=>
-      navigator.geolocation.getCurrentPosition(ok,no,{enableHighAccuracy:true,timeout:15000})
-    );
-    my={la:pos.coords.latitude,lo:pos.coords.longitude,name:null,acc:Math.round(pos.coords.accuracy)};
-    saveData(STORAGE.ME,my);
+    const pos=await new Promise((ok, no)=>{
+      navigator.geolocation.getCurrentPosition(ok, no, {enableHighAccuracy:true, timeout:15000});
+    });
+    my={
+      la: pos.coords.latitude,
+      lo: pos.coords.longitude,
+      name: null,
+      acc: Math.round(pos.coords.accuracy||0)
+    };
+    saveData(STORAGE.ME, my);
 
     guide.classList.add('hide');
     showMy();
     genLink();
-    fetchName(my.la,my.lo,'me');
+    fetchName(my.la, my.lo, 'me');
     renderMap(false);
 
   }catch(e){
     let msg='';
-    if(e.code===1)msg='❌ ခွင့်မပြုမိပါ။ လိပ်စာဘားရှိ 🔒 ကိုနှိပ်ပြီး တည်နေရာကို ခွင့်ပြုပေးပါ။';
-    else if(e.code===2)msg='❌ GPS အချက်ပြမရပါ။ ဖုန်းဆက်တင်များမှ GPS/တည်နေရာကို ဖွင့်ပေးပါ။';
-    else if(e.code===3)msg='⏳ အချိန်ကုန်သွားပါတယ်။ GPS ဖွင့်ပြီး ပွင့်လင်းနေရာတွင် ထပ်ကြိုးစားပါ။';
+    if(e.code===1) msg='❌ ခွင့်မပြုမိပါ။ လိပ်စာဘားရှိ 🔒 ကိုနှိပ်ပြီး တည်နေရာကို ခွင့်ပြုပေးပါ။';
+    else if(e.code===2) msg='❌ GPS အချက်ပြမရပါ။ ဖုန်းဆက်တင်များမှ GPS/တည်နေရာကို ဖွင့်ပေးပါ။';
+    else if(e.code===3) msg='⏳ အချိန်ကုန်သွားပါတယ်။ ပွင့်လင်းနေရာတွင် ထပ်မံကြိုးစားပါ။';
     else msg='❌ မအောင်မြင်ပါ။ GPS ဖွင့်ပြီး ထပ်ကြိုးစားပါ။';
     err.innerText=msg;
     err.classList.remove('hide');
@@ -245,26 +344,26 @@ async function manualCopy(){
   }
 }
 
-async function fetchName(la,lo,who){
+async function fetchName(la, lo, who){
   try{
     const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${la}&lon=${lo}&zoom=14&format=json&accept-language=my,en`);
-    if(!r.ok)return;
-    const d=await r.json(),a=d.address;
+    if(!r.ok) return;
+    const d=await r.json();
+    const a=d.address;
     let nm=a.village||a.town||a.city||a.district||'မြန်မာနိုင်ငံ';
-    if(a.state)nm+=`, ${a.state}`;
+    if(a.state) nm+=`, ${a.state}`;
 
     if(who==='me'){
       my.name=nm;
       document.getElementById('myName').innerText='📍 '+nm;
-      document.getElementById('myCard').classList.remove('hide');
       document.getElementById('myCo').innerText=`${my.la.toFixed(5)}, ${my.lo.toFixed(5)} · တိကျမှု ${my.acc} မီတာ`;
-      saveData(STORAGE.ME,my);
+      saveData(STORAGE.ME, my);
       genLink(nm);
     }else{
       ur.name=nm;
       document.getElementById('urName').innerText='📍 '+nm;
-      saveData(STORAGE.UR,ur);
-      if(my.la)calcDist();
+      saveData(STORAGE.UR, ur);
+      if(my.la) calcDist();
     }
   }catch(e){}
 }
@@ -273,31 +372,38 @@ function renderMap(both){
   const mapEl=document.getElementById('map');
   mapEl.style.display='block';
 
-  if(!mapReady){
-    // DOM အဆင်သင့်ဖြစ်မှ မြေပုံစတင်
-    setTimeout(()=>{
-      if(!mapReady){
-        map=L.map('map').setView([my.la||ur.la,my.lo||ur.lo],14);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-          attribution:'© OpenStreetMap'
-        }).addTo(map);
-        mapReady=true;
-        if(my.la)L.marker([my.la,my.lo]).addTo(map).bindPopup('ကျွန်ုပ်');
-        if(both&&ur.la){
-          L.marker([ur.la,ur.lo]).addTo(map).bindPopup('သူ့နေရာ');
-          L.polyline([[my.la,my.lo],[ur.la,ur.lo]],{color:'#FF6B35',weight:4}).addTo(map);
-          map.fitBounds([[my.la,my.lo],[ur.la,ur.lo]],{padding:[40,40]});
-        }
-      }
-    },100);
-  }else{
-    if(my.la)L.marker([my.la,my.lo]).addTo(map).bindPopup('ကျွန်ုပ်');
-    if(both&&ur.la){
-      L.marker([ur.la,ur.lo]).addTo(map).bindPopup('သူ့နေရာ');
-      L.polyline([[my.la,my.lo],[ur.la,ur.lo]],{color:'#FF6B35',weight:4}).addTo(map);
-      map.fitBounds([[my.la,my.lo],[ur.la,ur.lo]],{padding:[40,40]});
+  setTimeout(()=>{
+    if(!mapReady){
+      const centerLat=my.la||ur.la||21.0;
+      const centerLon=my.lo||ur.lo||96.0;
+      map=L.map('map').setView([centerLat, centerLon], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        attribution:'© OpenStreetMap contributors',
+        maxZoom:19
+      }).addTo(map);
+      mapReady=true;
     }
-  }
+
+    map.eachLayer(layer=>{ if(layer instanceof L.Marker || layer instanceof L.Polyline) map.removeLayer(layer); });
+
+    if(my.la){
+      L.marker([my.la, my.lo], {icon:L.divIcon({
+        html:'<div style="background:#00FFC8;width:24px;height:24px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px rgba(0,255,200,.5)"></div>',
+        className:'', iconSize:[24,24], iconAnchor:[12,12]
+      })}).addTo(map).bindPopup('ကျွန်ုပ်');
+      map.setView([my.la, my.lo], 13);
+    }
+
+    if(both && ur.la){
+      L.marker([ur.la, ur.lo], {icon:L.divIcon({
+        html:'<div style="background:#00BFFF;width:24px;height:24px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 10px rgba(0,191,255,.5)"></div>',
+        className:'', iconSize:[24,24], iconAnchor:[12,12]
+      })}).addTo(map).bindPopup('သူ့နေရာ');
+      L.polyline([[my.la,my.lo],[ur.la,ur.lo]], {color:'#FF6B35', weight:4, opacity:.8}).addTo(map);
+      map.fitBounds([[my.la,my.lo],[ur.la,ur.lo]], {padding:[30,30]});
+      calcDist();
+    }
+  }, 50);
 }
 
 function showMy(){
@@ -305,20 +411,20 @@ function showMy(){
 }
 function showUr(){
   document.getElementById('urCard').classList.remove('hide');
-  if(my.la){renderMap(true);calcDist()}
+  if(my.la){ renderMap(true); }
 }
 function calcDist(){
-  if(!my.la||!ur.la)return;
+  if(!my.la || !ur.la) return;
   const d=getDist(my.la,my.lo,ur.la,ur.lo);
   document.getElementById('distBox').classList.remove('hide');
-  document.getElementById('distValue').innerText=d<1000?`${Math.round(d)} မီတာ`:`${(d/1000).toFixed(2)} ကီလိုမီတာ`;
+  document.getElementById('distValue').innerText=d<1000 ? `${Math.round(d)} မီတာ` : `${(d/1000).toFixed(2)} ကီလိုမီတာ`;
 }
 function getDist(l1,o1,l2,o2){
-  const R=6371000,p=Math.PI/180;
-  const a=Math.sin((l2-l1)*p/2)**2+Math.cos(l1*p)*Math.cos(l2*p)*Math.sin((o2-o1)*p/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  const R=6371000;
+  const p=Math.PI/180;
+  const a=Math.sin((l2-l1)*p/2)**2 + Math.cos(l1*p)*Math.cos(l2*p)*Math.sin((o2-o1)*p/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 </script>
 </body>
-                                                             </html>
-        
+</html>
