@@ -1,352 +1,555 @@
 <!DOCTYPE html>
 <html lang="my">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>✨ အမြန်တည်နေရာမျှဝေခြင်း</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;600;700;900&display=swap');
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Noto Sans Myanmar',sans-serif}
-:root{
-  --gold:linear-gradient(135deg,#FFD700 0%,#FFB300 50%,#FF9500 100%);
-  --teal:linear-gradient(135deg,#00FFC8 0%,#00E5B0 50%,#00CC99 100%);
-  --blue:linear-gradient(135deg,#00D9FF 0%,#00BFFF 50%,#0099E5 100%);
-  --red:linear-gradient(135deg,#FF5252 0%,#FF3838 50%,#E52E2E 100%);
-  --green:linear-gradient(135deg,#00E676 0%,#00C853 50%,#00A843 100%);
-  --bg-main:#050816;--card-bg:#0F1429;
-  --glow-teal:0 0 20px rgba(0,255,200,.4),0 4px 20px rgba(0,204,153,.3);
-  --glow-gold:0 0 20px rgba(255,215,0,.4),0 4px 20px rgba(255,149,0,.3);
-  --glow-green:0 0 20px rgba(0,230,118,.4),0 4px 20px rgba(0,168,67,.3);
-  --glow-gray:0 0 10px rgba(120,120,120,.2);
-}
-body{background:var(--bg-main);color:#fff;min-height:100vh;padding:24px 16px}
-.container{max-width:520px;margin:0 auto}
-.header{text-align:center;margin-bottom:28px}
-.pro-badge{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(90deg,rgba(255,215,0,.18),rgba(255,149,0,.12));color:#FFD700;padding:8px 20px;border-radius:50px;font-size:13px;font-weight:700;margin-bottom:12px;border:1px solid rgba(255,215,0,.3);box-shadow:0 0 15px rgba(255,215,0,.15)}
-h1{font-size:24px;font-weight:900;background:var(--gold);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.subtitle{color:#8A94B8;font-size:14px;margin-top:8px}
-.main-card{background:var(--card-bg);border-radius:28px;padding:28px 24px;border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#D4AF37">
+  <title>📍 တည်နေရာဝန်ဆောင်မှု</title>
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Noto Sans Myanmar", sans-serif;
+    }
 
-/* အဓိကခလုတ် */
-.btn{
-  width:100%;padding:22px 24px;border:none;border-radius:20px;font-size:19px;font-weight:800;cursor:pointer;
-  margin:10px 0;transition:all .25s ease;position:relative;overflow:hidden
-}
-.btn::before{
-  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transition:left .4s ease
-}
-.btn:hover::before{left:100%}
-.btn:active{transform:scale(.96);filter:brightness(.9)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #F4D03F;
+      --dark: #0F0F1A;
+      --card: #1A1A2E;
+      --accent: #00D4FF;
+      --success: #00FF88;
+      --text: #FFFFFF;
+      --muted: #9CA3AF;
+    }
 
-.btn-share{
-  background:var(--teal);color:#000;box-shadow:var(--glow-teal);
-  border:2px solid rgba(0,255,200,.3);font-size:20px;padding:24px
-}
-.btn-share:hover{filter:brightness(1.08);box-shadow:0 0 30px rgba(0,255,200,.5),0 6px 24px rgba(0,204,153,.35)}
+    body {
+      background: linear-gradient(145deg, #0F0F1A, #1A1A2E);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
 
-/* 🔗 လင့်ဘား */
-.link-bar{
-  display:flex;align-items:center;gap:10px;margin-top:20px;padding:4px;background:rgba(255,215,0,.08);
-  border:2px solid rgba(255,215,0,.25);border-radius:16px;box-shadow:0 0 15px rgba(255,215,0,.1);display:none
-}
-.link-input{
-  flex:1;padding:16px 18px;background:transparent;border:none;color:#fff;font-size:14px;
-  outline:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap
-}
+    .container {
+      max-width: 520px;
+      margin: 0 auto;
+    }
 
-/* အခြေအနေပြ ခလုတ် */
-.status-btn{
-  padding:16px 18px;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;
-  transition:all .25s ease;white-space:nowrap
-}
-.status-btn:active{transform:scale(.96)}
-/* မကူးယူရသေး */
-.not-copied{
-  background:linear-gradient(135deg,#555 0%,#444 100%);color:#ccc;
-  box-shadow:var(--glow-gray);border:1px solid rgba(150,150,150,.2)
-}
-/* ကူးယူပြီးပြီ */
-.copied{
-  background:var(--green);color:#000;
-  box-shadow:var(--glow-green);border:1px solid rgba(0,230,118,.3)
-}
-/* ကိုယ်တိုင်ကူးယူရန် */
-.copy-manual{
-  background:var(--gold);color:#000;
-  box-shadow:var(--glow-gold);border:1px solid rgba(255,215,0,.3)
-}
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding-top: 10px;
+    }
 
-/* အသိပေးစာ */
-.perm-box{background:rgba(0,255,200,.04);border:1px solid rgba(0,255,200,.2);border-radius:20px;padding:24px;margin:20px 0;display:none;text-align:center}
-.perm-icon{font-size:44px;margin-bottom:12px}
-.perm-title{font-weight:800;font-size:18px;margin-bottom:16px;color:#00FFC8}
-.perm-steps{text-align:left;line-height:2.2;padding-left:8px;margin-bottom:12px}
-.perm-step{font-size:15px;color:#E8E8E8}
-.perm-step b{color:#00FFC8}
-.error-text{color:#FF6B6B;font-size:14px;margin-top:14px;line-height:1.8;text-align:left;padding:14px;background:rgba(255,82,82,.06);border-radius:12px;border:1px solid rgba(255,82,82,.15);display:none}
-.btn-retry{background:var(--red);color:#fff;box-shadow:var(--glow-red);border:none;border-radius:14px;padding:14px 24px;font-size:15px;font-weight:700;cursor:pointer;margin-top:14px;display:none}
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 6px;
+    }
 
-#map{width:100%;height:300px;border-radius:16px;margin:20px 0;display:none;border:2px solid rgba(255,255,255,.08)}
-.loc-card{padding:18px;border-radius:16px;margin:14px 0;display:none;animation:slideUp .35s ease forwards;opacity:0;transform:translateY(10px)}
-@keyframes slideUp{to{opacity:1;transform:translateY(0)}}
-.me{background:rgba(0,255,200,.06);border-left:4px solid #00FFC8}
-.you{background:rgba(0,217,255,.06);border-left:4px solid #00D9FF}
-.loc-label{font-size:13px;color:#7A849E;margin-bottom:4px;font-weight:600}
-.loc-name{font-weight:800;font-size:16px}
-.loc-coor{font-size:13px;color:#9AA4C0;margin-top:6px}
-.dist-box{background:rgba(255,107,53,.06);border:1px solid rgba(255,107,53,.18);border-radius:16px;padding:18px;margin:16px 0;display:none}
-.dist-label{font-size:13px;color:#FFB088;font-weight:600}
-.dist-value{font-size:22px;font-weight:900;color:#FF6B35;margin-top:4px}
-.footer-note{font-size:13px;color:#5A6482;text-align:center;margin-top:24px;line-height:1.7}
-.hide{display:none!important}
-</style>
+    .header p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35),
+                  0 0 0 1px rgba(212, 175, 55, 0.08) inset;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 20px;
+      font-size: 18px;
+      font-weight: 700;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      color: #000;
+      box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
+      margin-bottom: 14px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 6px 26px rgba(212, 175, 55, 0.45);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.7;
+      transform: none;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-1px);
+    }
+
+    #map {
+      width: 100%;
+      height: 420px;
+      border-radius: 16px;
+      margin: 20px 0;
+      border: 2px solid rgba(0, 255, 136, 0.25);
+      box-shadow: 0 4px 20px rgba(0, 255, 136, 0.08);
+      display: none;
+    }
+
+    .info-box {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 16px;
+      display: none;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 15px;
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: var(--muted);
+    }
+
+    .info-value {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .link-box {
+      margin-top: 18px;
+      display: none;
+    }
+
+    .link-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
+    .btn-small {
+      width: 100%;
+      padding: 13px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      background: rgba(0, 212, 255, 0.12);
+      color: var(--accent);
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-small:hover {
+      background: rgba(0, 212, 255, 0.2);
+    }
+
+    .success-text {
+      margin-top: 12px;
+      padding: 12px;
+      background: rgba(0, 255, 136, 0.08);
+      border-radius: 10px;
+      color: var(--success);
+      font-size: 14px;
+      display: none;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 14px;
+      border-radius: 12px;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+
+    .action-primary {
+      background: var(--accent);
+      color: #000;
+    }
+
+    .action-primary:hover {
+      transform: scale(1.03);
+    }
+
+    .action-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+    }
+
+    .action-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+  </style>
 </head>
 <body>
+
 <div class="container">
   <div class="header">
-    <div class="pro-badge">✨ အမြန်မျှဝေစနစ်</div>
-    <h1>တည်နေရာဖလှယ်ခြင်း</h1>
-    <p class="subtitle">နှိပ်ရုံနဲ့ လင့်ရပြီး အလိုအလျောက်ကူးပြီးသား</p>
+    <h1>📍 တည်နေရာဝန်ဆောင်မှု</h1>
+    <p>တကယ့်နေရာ • တိကျ • လွယ်ကူ</p>
   </div>
 
-  <div class="main-card">
-    <!-- ⚡ အမြန်မျှဝေမယ် ခလုတ် -->
-    <button id="shareBtn" class="btn btn-share" onclick="shareNow()">⚡ ကျွန်ုပ်နေရာ အမြန်မျှဝေမယ်</button>
+  <!-- ပေးပို့သူအကန့် -->
+  <div id="sender-card" class="card">
+    <button id="share-btn" class="btn btn-primary" onclick="shareLocation()">
+      ⚡ အမြန်မျှဝေမည်
+    </button>
 
-    <!-- လုပ်ဆောင်ရန် အသိပေးစာ -->
-    <div id="permGuide" class="perm-box hide">
-      <div class="perm-icon">📍</div>
-      <div class="perm-title">တည်နေရာရယူရန်</div>
-      <div class="perm-steps">
-        <div class="perm-step">၁️⃣ ဖုန်းရဲ့ <b>GPS / တည်နေရာဝန်ဆောင်မှု</b> ကို ဖွင့်ပါ</div>
-        <div class="perm-step">၂️⃣ အပေါ်ပေါ်လာတဲ့ မေးခွန်းထဲက <b>"ခွင့်ပြုပါ"</b> ကို နှိပ်ပါ</div>
-        <div class="perm-step">၃️⃣ လင့်အလိုအလျောက်ပေါ်လာပြီး <b>အလိုအလျောက်ကူးပေးမည်</b> ✅</div>
-      </div>
-      <div id="errorMsg" class="error-text"></div>
-      <button id="retryBtn" class="btn-retry" onclick="shareNow()">🔄 ထပ်မံကြိုးစားမည်</button>
-    </div>
-
-    <!-- 🔗 လင့်ဘား + အခြေအနေပြခလုတ် -->
-    <div id="linkBar" class="link-bar">
-      <input id="linkText" class="link-input" readonly>
-      <button id="statusBtn" class="status-btn not-copied" onclick="manualCopy()">မကူးယူရသေး</button>
-    </div>
+    <button id="map-btn" class="btn btn-secondary" onclick="showMyMap()">
+      🗺️ မြေပုံကြည့်မည်
+    </button>
 
     <div id="map"></div>
 
-    <div id="myCard" class="loc-card me hide">
-      <div class="loc-label">🟢 ကျွန်ုပ်၏တည်နေရာ</div>
-      <div class="loc-name" id="myName"></div>
-      <div class="loc-coor" id="myCo"></div>
+    <div id="info-box" class="info-box">
+      <div class="info-row">
+        <span class="info-label">အခြေအနေ</span>
+        <span class="info-value" id="status">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">လတ္တီကျု</span>
+        <span class="info-value" id="lat-val">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">လောင်ဂျီကျု</span>
+        <span class="info-value" id="lon-val">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">တိကျမှု</span>
+        <span class="info-value" id="acc-val">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">ရယူချိန်</span>
+        <span class="info-value" id="time-val">—</span>
+      </div>
     </div>
 
-    <div id="urCard" class="loc-card you hide">
-      <div class="loc-label">🔵 သူ၏တည်နေရာ</div>
-      <div class="loc-name" id="urName"></div>
-      <div class="loc-coor" id="urCo"></div>
+    <div id="link-box" class="link-box">
+      <p style="color:#9CA3AF; font-size:14px; margin-bottom:8px;">🔗 မျှဝေရန်လင့်</p>
+      <input type="text" id="share-link" class="link-input" readonly>
+      <button class="btn-small" onclick="copyLink()">📋 လင့်ကူးယူပါ</button>
+      <button class="btn-small" onclick="openShare()">📱 အက်ပ်သို့တိုက်ရိုက်ပို့ပါ</button>
+      <div id="success-msg" class="success-text">✅ လင့်ကိုအသင့်ပါပြီ။ အက်ပ်ထဲကူးထည့်ပြီးပို့နိုင်ပါပြီ!</div>
+    </div>
+  </div>
+
+  <!-- ကြည့်ရှု့သူအကန့် -->
+  <div id="viewer-card" class="card hidden">
+    <h2 style="font-size: 20px; margin-bottom: 18px; color: #D4AF37;">📌 မျှဝေထားသောတည်နေရာ</h2>
+    
+    <div id="viewer-map" style="height: 420px; border-radius: 16px; border: 2px solid rgba(0, 255, 136, 0.25);"></div>
+    
+    <div class="info-box" style="display: block; margin-top: 20px;">
+      <div class="info-row">
+        <span class="info-label">ပေးပို့သူ</span>
+        <span class="info-value" style="color: #00FF88;">● အွန်လိုင်း</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">လတ္တီကျု</span>
+        <span class="info-value" id="v-lat">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">လောင်ဂျီကျု</span>
+        <span class="info-value" id="v-lon">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">အချက်အလက်ရရှိချိန်</span>
+        <span class="info-value" id="v-time">—</span>
+      </div>
     </div>
 
-    <div id="distBox" class="dist-box hide">
-      <div class="dist-label">နှစ်ဦးအကြားအကွာအဝေး</div>
-      <div class="dist-value" id="distValue"></div>
+    <div class="action-row">
+      <a id="dir-link" href="" target="_blank" class="action-btn action-primary">🚗 လမ်းညွှန်ကြည့်မည်</a>
+      <a id="fullmap-link" href="" target="_blank" class="action-btn action-secondary">🗺️ မြေပုံအပြည့်</a>
     </div>
-
-    <p class="footer-note">💡 လင့်ကူးပြီးပါက တိုက်ရိုက်မိတ်ဆွေထံ ပေးပို့လိုက်ပါ</p>
   </div>
 </div>
 
 <script>
-let map,my={},ur={},mapReady=false;
-const STORAGE={ME:'share_me',UR:'share_ur'};
+let map, vmap;
+let myLat, myLon;
+let shareLink = '';
+let mapReady = false;
+let currentTime = '';
 
-function saveData(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-function loadData(k){try{const d=localStorage.getItem(k);return d?JSON.parse(d):null}catch(e){return null}}
+async function shareLocation() {
+  const btn = document.getElementById('share-btn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ နေရာရယူနေသည်...';
 
-window.onload=()=>{
-  const p=new URLSearchParams(location.search);
-  const la=p.get('lat')?+p.get('lat'):null;
-  const lo=p.get('lon')?+p.get('lon'):null;
-  const nm=p.get('place');
-
-  if(la&&lo){
-    ur={la,lo,name:nm};
-    saveData(STORAGE.UR,ur);
-    showUr();
-    if(!nm)fetchName(la,lo,'ur');
-  }else{
-    const sUr=loadData(STORAGE.UR);
-    if(sUr){ur=sUr;showUr();if(!sUr.name)fetchName(sUr.la,sUr.lo,'ur')}
-  }
-
-  const sMe=loadData(STORAGE.ME);
-  if(sMe){my=sMe;showMy(true);showLinkBar();updateStatus('copied')}
-};
-
-async function shareNow(){
-  const btn=document.getElementById('shareBtn');
-  const guide=document.getElementById('permGuide');
-  const err=document.getElementById('errorMsg');
-  const retry=document.getElementById('retryBtn');
-  const linkBar=document.getElementById('linkBar');
-
-  btn.disabled=true;
-  btn.innerText='စောင့်ပါ...';
-  guide.classList.remove('hide');
-  err.classList.add('hide');
-  retry.classList.add('hide');
-  linkBar.classList.add('hide');
-  updateStatus('pending');
-
-  if(!navigator.geolocation){
-    err.innerText='❌ သင့်ဖုန်းက တည်နေရာမထောက်ပံ့ပါ။ Chrome/Safari ဖြင့် ကြိုးစားပါ။';
-    err.classList.remove('hide');
-    retry.classList.remove('hide');
-    btn.disabled=false;
-    btn.innerText='⚡ ကျွန်ုပ်နေရာ အမြန်မျှဝေမယ်';
+  if (!navigator.geolocation) {
+    alert('❌ တည်နေရာစနစ်မရှိပါ');
+    btn.disabled = false;
+    btn.innerHTML = '⚡ အမြန်မျှဝေမည်';
     return;
   }
 
-  try{
-    const pos=await new Promise((ok,no)=>
-      navigator.geolocation.getCurrentPosition(ok,no,{enableHighAccuracy:true,timeout:15000})
-    );
-    my={la:pos.coords.latitude,lo:pos.coords.longitude,name:null,acc:Math.round(pos.coords.accuracy)};
-    saveData(STORAGE.ME,my);
+  try {
+    const pos = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 12000,
+        maximumAge: 0
+      });
+    });
 
-    guide.classList.add('hide');
-    showMy();
-    genLink();
-    fetchName(my.la,my.lo,'me');
-    render(false);
+    myLat = pos.coords.latitude;
+    myLon = pos.coords.longitude;
+    const accuracy = Math.round(pos.coords.accuracy);
+    currentTime = new Date().toLocaleString('my-MM', { timeZone: 'Asia/Yangon' });
 
-  }catch(e){
-    let msg='';
-    if(e.code===1)msg='❌ ခွင့်မပြုမိပါ။ လိပ်စာဘားရှိ 🔒 ကိုနှိပ်ပြီး တည်နေရာကို ခွင့်ပြုပေးပါ။';
-    else if(e.code===2)msg='❌ GPS အချက်ပြမရပါ။ ဖုန်းဆက်တင်များမှ GPS/တည်နေရာကို ဖွင့်ပေးပါ။';
-    else if(e.code===3)msg='⏳ အချိန်ကုန်သွားပါတယ်။ GPS ဖွင့်ပြီး ပွင့်လင်းနေရာတွင် ထပ်ကြိုးစားပါ။';
-    else msg='❌ မအောင်မြင်ပါ။ GPS ဖွင့်ပြီး ထပ်ကြိုးစားပါ။';
-    err.innerText=msg;
-    err.classList.remove('hide');
-    retry.classList.remove('hide');
+    document.getElementById('info-box').style.display = 'block';
+    document.getElementById('status').textContent = '✅ အဆင်သင့်ဖြစ်ပါပြီ';
+    document.getElementById('lat-val').textContent = myLat.toFixed(6);
+    document.getElementById('lon-val').textContent = myLon.toFixed(6);
+    document.getElementById('acc-val').textContent = `${accuracy} မီတာ`;
+    document.getElementById('time-val').textContent = currentTime;
+
+    renderMap(myLat, myLon, 'map');
+
+    const base = window.location.href.split('?')[0];
+    shareLink = `${base}?lat=${myLat}&lon=${myLon}&t=${encodeURIComponent(currentTime)}`;
+    document.getElementById('share-link').value = shareLink;
+    document.getElementById('link-box').style.display = 'block';
+
+    await openShare();
+
+  } catch (err) {
+    let msg = 'တည်နေရာရယူရန်ပျက်ကွက်ပါသည်';
+    if (err.code === 1) msg = '❌ တည်နေရာခွင့်ပြုချက်မပေးထားပါ။ ခွင့်ပြုပါ ကိုရွေးချယ်ပါ';
+    alert(msg);
   }
 
-  btn.disabled=false;
-  btn.innerText='⚡ ကျွန်ုပ်နေရာ အမြန်မျှဝေမယ်';
+  btn.disabled = false;
+  btn.innerHTML = '⚡ အမြန်မျှဝေမည်';
 }
 
-function genLink(name=''){
-  const base=location.href.split('?')[0];
-  const fullLink=`${base}?lat=${my.la}&lon=${my.lo}${name?'&place='+encodeURIComponent(name):''}`;
-  document.getElementById('linkText').value=fullLink;
-  showLinkBar();
-  autoCopy(fullLink);
+async function showMyMap() {
+  if (myLat && myLon) {
+    document.getElementById('map').style.display = 'block';
+    document.getElementById('info-box').style.display = 'block';
+    renderMap(myLat, myLon, 'map');
+    return;
+  }
+
+  const btn = document.getElementById('map-btn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ နေရာရှာဖွေနေသည်...';
+
+  if (!navigator.geolocation) {
+    alert('❌ တည်နေရာစနစ်မရှိပါ');
+    btn.disabled = false;
+    btn.innerHTML = '🗺️ မြေပုံကြည့်မည်';
+    return;
+  }
+
+  try {
+    const pos = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject, {
+        enableHighAccuracy: true,
+        timeout: 12000,
+        maximumAge: 0
+      });
+    });
+
+    myLat = pos.coords.latitude;
+    myLon = pos.coords.longitude;
+    const accuracy = Math.round(pos.coords.accuracy);
+    currentTime = new Date().toLocaleString('my-MM', { timeZone: 'Asia/Yangon' });
+
+    document.getElementById('map').style.display = 'block';
+    document.getElementById('info-box').style.display = 'block';
+    document.getElementById('status').textContent = '✅ တွေ့ရှိပါသည်';
+    document.getElementById('lat-val').textContent = myLat.toFixed(6);
+    document.getElementById('lon-val').textContent = myLon.toFixed(6);
+    document.getElementById('acc-val').textContent = `${accuracy} မီတာ`;
+    document.getElementById('time-val').textContent = currentTime;
+
+    renderMap(myLat, myLon, 'map');
+
+    const base = window.location.href.split('?')[0];
+    shareLink = `${base}?lat=${myLat}&lon=${myLon}&t=${encodeURIComponent(currentTime)}`;
+    document.getElementById('share-link').value = shareLink;
+    document.getElementById('link-box').style.display = 'block';
+
+  } catch (err) {
+    alert('❌ တည်နေရာရှာမတွေ့ပါ။ ခွင့်ပြုပေးထားကြောင်းသေချာပါစေ။');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '🗺️ မြေပုံကြည့်မည်';
 }
 
-function showLinkBar(){
-  document.getElementById('linkBar').classList.remove('hide');
-}
+function renderMap(lat, lon, elementId) {
+  const el = document.getElementById(elementId);
+  el.style.display = 'block';
 
-// 🔄 အလိုအလျောက်ကူးယူခြင်း
-async function autoCopy(text){
-  const statusBtn=document.getElementById('statusBtn');
-  try{
-    await navigator.clipboard.writeText(text);
-    updateStatus('copied');
-  }catch(e){
-    updateStatus('manual');
+  if (elementId === 'map' && mapReady) {
+    map.setView([lat, lon], 17);
+    if (window.myMarker) map.removeLayer(window.myMarker);
+    window.myMarker = L.marker([lat, lon]).addTo(map)
+      .bindPopup('📍 ဤနေရာတွင် ကျွန်ုပ်ရှိနေပါသည်')
+      .openPopup();
+    return;
+  }
+
+  const mapInstance = L.map(elementId).setView([lat, lon], 17);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap | မြန်မာဘာသာ',
+    maxZoom: 19
+  }).addTo(mapInstance);
+
+  const marker = L.marker([lat, lon]).addTo(mapInstance)
+    .bindPopup(`
+      <div style="min-width: 200px; font-family: sans-serif;">
+        <strong>📍 ဤနေရာတွင် ရှိနေပါသည်</strong><br>
+        <hr style="margin:6px 0; border:none; border-top:1px solid #eee;">
+        လတ္တီကျု: ${lat.toFixed(6)}<br>
+        လောင်ဂျီကျု: ${lon.toFixed(6)}
+      </div>
+    `)
+    .openPopup();
+
+  if (elementId === 'map') {
+    L.circle([lat, lon], {
+      color: '#00FF88',
+      fillColor: '#00FF88',
+      fillOpacity: 0.1,
+      radius: 50
+    }).addTo(mapInstance);
+    map = mapInstance;
+    mapReady = true;
+    window.myMarker = marker;
+  } else {
+    L.circle([lat, lon], {
+      color: '#D4AF37',
+      fillColor: '#D4AF37',
+      fillOpacity: 0.1,
+      radius: 50
+    }).addTo(mapInstance);
+    vmap = mapInstance;
   }
 }
 
-function updateStatus(state){
-  const btn=document.getElementById('statusBtn');
-  btn.classList.remove('not-copied','copied','copy-manual');
-  if(state==='copied'){
-    btn.classList.add('copied');
-    btn.innerText='✅ ကူးယူပြီးပြီ';
-  }else if(state==='manual'){
-    btn.classList.add('copy-manual');
-    btn.innerText='📋 ကူးယူပါ';
-  }else{
-    btn.classList.add('not-copied');
-    btn.innerText='မကူးယူရသေး';
+async function openShare() {
+  if (!shareLink) {
+    alert('❌ ဦးစွာအမြန်မျှဝေမည် ကိုနှိပ်ပါ');
+    return;
   }
-}
 
-// ကိုယ်တိုင်ကူးယူခြင်း
-async function manualCopy(){
-  const text=document.getElementById('linkText').value;
-  try{
-    await navigator.clipboard.writeText(text);
-    updateStatus('copied');
-  }catch(e){
-    document.getElementById('linkText').select();
-    alert('ကူးယူပါ- '+text);
+  const text = `ကျွန်ုပ်ဤနေရာတွင် ရှိနေပါသည် 👇
+
+လတ္တီကျု: ${myLat.toFixed(6)}
+လောင်ဂျီကျု: ${myLon.toFixed(6)}
+ရယူချိန်: ${currentTime}
+
+မြေပုံကြည့်ရန် 👉 ${shareLink}`;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: 'ကျွန်ုပ်၏တည်နေရာ',
+        text: text,
+        url: shareLink
+      });
+      return;
+    } catch (e) {}
   }
+
+  copyLink();
+  alert('✅ လင့်ကိုကူးပေးပါပြီ။ သင့်အက်ပ်ထဲဝင်ပြီး ပို့ချင်သူကိုရွေးပြီး ကူးထည့်ပါ။');
 }
 
-async function fetchName(la,lo,who){
-  try{
-    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${la}&lon=${lo}&zoom=14&format=json&accept-language=my,en`);
-    if(!r.ok)return;
-    const d=await r.json(),a=d.address;
-    let nm=a.village||a.town||a.city||a.district||'မြန်မာနိုင်ငံ';
-    if(a.state)nm+=`, ${a.state}`;
-
-    if(who==='me'){
-      my.name=nm;
-      document.getElementById('myName').innerText='📍 '+nm;
-      document.getElementById('myCard').classList.remove('hide');
-      document.getElementById('myCo').innerText=`${my.la.toFixed(5)}, ${my.lo.toFixed(5)} · တိကျမှု ${my.acc} မီတာ`;
-      saveData(STORAGE.ME,my);
-      genLink(nm);
-    }else{
-      ur.name=nm;
-      document.getElementById('urName').innerText='📍 '+nm;
-      saveData(STORAGE.UR,ur);
-      if(my.la)calcDist();
-    }
-  }catch(e){}
+function copyLink() {
+  navigator.clipboard.writeText(shareLink).then(() => {
+    const msg = document.getElementById('success-msg');
+    msg.style.display = 'block';
+    setTimeout(() => msg.style.display = 'none', 4000);
+  });
 }
 
-function render(both){
-  document.getElementById('map').style.display='block';
-  if(!mapReady){
-    map=L.map('map').setView([my.la||ur.la,my.lo||ur.lo],14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    mapReady=true;
+window.onload = function () {
+  const p = new URLSearchParams(window.location.search);
+  const lat = p.get('lat');
+  const lon = p.get('lon');
+  const t = p.get('t');
+
+  if (lat && lon) {
+    document.getElementById('sender-card').classList.add('hidden');
+    document.getElementById('viewer-card').classList.remove('hidden');
+
+    document.getElementById('v-lat').textContent = parseFloat(lat).toFixed(6);
+    document.getElementById('v-lon').textContent = parseFloat(lon).toFixed(6);
+    if (t) document.getElementById('v-time').textContent = decodeURIComponent(t);
+
+    renderMap(parseFloat(lat), parseFloat(lon), 'viewer-map');
+
+    document.getElementById('dir-link').href = `https://www.openstreetmap.org/directions?to=${lat},${lon}`;
+    document.getElementById('fullmap-link').href = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}&zoom=16`;
   }
-  if(my.la)L.marker([my.la,my.lo]).addTo(map).bindPopup('ကျွန်ုပ်');
-  if(both&&ur.la){
-    L.marker([ur.la,ur.lo]).addTo(map).bindPopup('သူ့နေရာ');
-    L.polyline([[my.la,my.lo],[ur.la,ur.lo]],{color:'#FF6B35',weight:4}).addTo(map);
-    map.fitBounds([[my.la,my.lo],[ur.la,ur.lo]],{padding:[40,40]});
-    calcDist();
-  }
-}
-
-function showMy(){
-  document.getElementById('myCard').classList.remove('hide');
-}
-function showUr(){
-  document.getElementById('urCard').classList.remove('hide');
-  if(my.la){render(true);calcDist()}
-}
-function calcDist(){
-  if(!my.la||!ur.la)return;
-  const d=getDist(my.la,my.lo,ur.la,ur.lo);
-  document.getElementById('distBox').classList.remove('hide');
-  document.getElementById('distValue').innerText=d<1000?`${Math.round(d)} မီတာ`:`${(d/1000).toFixed(2)} ကီလိုမီတာ`;
-}
-function getDist(l1,o1,l2,o2){
-  const R=6371000,p=Math.PI/180;
-  const a=Math.sin((l2-l1)*p/2)**2+Math.cos(l1*p)*Math.cos(l2*p)*Math.sin((o2-o1)*p/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
+};
 </script>
 </body>
-  </html>
+                                                 </html>
   
