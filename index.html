@@ -13,421 +13,189 @@ body{
   color:#fff;
   min-height:100vh;
   padding:20px 16px;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-family:sans-serif;
 }
 .container{max-width:520px;margin:0 auto}
-.header{text-align:center;margin-bottom:24px}
-.badge{
-  display:inline-block;
-  background:linear-gradient(90deg,rgba(255,215,0,.2),rgba(255,149,0,.1));
-  color:#FFD700;
-  padding:8px 20px;
-  border-radius:50px;
-  font-size:14px;
-  font-weight:bold;
-  margin-bottom:10px;
-  border:1px solid rgba(255,215,0,.3);
-}
-h1{font-size:24px;font-weight:bold;color:#FFD700;margin-bottom:8px}
-.subtitle{color:#8A94B8;font-size:14px}
-.card{
-  background:#0F1429;
-  border-radius:24px;
-  padding:24px 20px;
-  border:1px solid rgba(255,255,255,.08);
-}
+h1{font-size:22px;text-align:center;margin-bottom:20px;color:#FFD700}
 
-.btn{
+.btn-main{
   width:100%;
   padding:20px;
   border:none;
   border-radius:16px;
   font-size:18px;
   font-weight:bold;
-  cursor:pointer;
-  transition:all .2s;
-}
-.btn:active{transform:scale(.97)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-share{
   background:linear-gradient(135deg,#00FFC8,#00CC99);
   color:#000;
-  font-size:20px;
-  box-shadow:0 0 20px rgba(0,255,200,.3);
+  cursor:pointer;
+  margin-bottom:20px;
 }
+.btn-main:active{transform:scale(.97)}
+.btn-main:disabled{opacity:.5}
 
-/* 🔗 လင့်အကွက် - အထူးပြုပြင် */
-.link-box{
-  margin-top:20px;
-  padding:16px;
-  background:rgba(255,215,0,.1);
-  border:2px solid rgba(255,215,0,.3);
+.box{
+  background:#0F1429;
   border-radius:16px;
+  padding:20px;
+  margin-bottom:16px;
   display:none;
 }
-.link-label{font-size:14px;color:#FFD700;margin-bottom:10px;font-weight:bold}
-.link-input{
-  width:100%;
-  padding:14px;
+.box-title{font-weight:bold;margin-bottom:12px;color:#00FFC8}
+
+.link-text{
   background:#000;
-  border:1px solid rgba(255,215,0,.3);
-  border-radius:12px;
+  border:1px solid #FFD700;
+  border-radius:10px;
+  padding:14px;
   color:#fff;
   font-size:14px;
-  outline:none;
+  word-break:break-all;
   margin-bottom:12px;
 }
-.btn-copy{
-  width:100%;
-  padding:14px;
-  background:linear-gradient(135deg,#FFD700,#FFB300);
-  color:#000;
-  border:none;
-  border-radius:12px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-}
-.btn-copy:active{transform:scale(.97)}
-.copy-success{
-  margin-top:10px;
-  padding:12px;
-  background:rgba(0,255,100,.1);
-  border:1px solid rgba(0,255,100,.3);
-  border-radius:10px;
-  color:#00FF64;
-  text-align:center;
-  font-weight:bold;
-  display:none;
-}
+.hint{font-size:13px;color:#FFD700;line-height:1.6}
 
 #map{
   width:100%;
   height:350px;
-  border-radius:16px;
-  margin:20px 0;
-  display:none;
-  border:2px solid rgba(255,255,255,.08);
-}
-
-.perm-box{
-  background:rgba(0,255,200,.04);
-  border:1px solid rgba(0,255,200,.2);
-  border-radius:16px;
-  padding:20px;
-  margin:16px 0;
-  display:none;
-}
-.perm-title{font-weight:bold;font-size:16px;color:#00FFC8;margin-bottom:12px;text-align:center}
-.perm-step{font-size:15px;color:#ddd;margin:10px 0;line-height:1.8}
-.error-text{
-  color:#FF6B6B;
-  font-size:14px;
-  margin-top:12px;
-  padding:12px;
-  background:rgba(255,82,82,.06);
-  border-radius:10px;
-  display:none;
-  line-height:1.6;
-}
-.btn-retry{
-  background:linear-gradient(135deg,#FF5252,#E52E2E);
-  color:#fff;
-  border:none;
   border-radius:12px;
-  padding:12px 20px;
-  font-size:15px;
-  font-weight:bold;
-  cursor:pointer;
-  margin-top:12px;
+  margin-top:16px;
   display:none;
 }
-
-.loc-card{
-  padding:16px;
-  border-radius:12px;
-  margin:12px 0;
-  display:none;
-  background:rgba(0,255,200,.05);
-  border-left:3px solid #00FFC8;
-}
-.loc-label{font-size:13px;color:#7A849E;margin-bottom:4px}
-.loc-name{font-weight:bold;font-size:16px}
-.loc-coor{font-size:13px;color:#9AA4C0;margin-top:4px}
-.you{background:rgba(0,217,255,.05);border-left-color:#00D9FF}
-.dist-box{
-  background:rgba(255,107,53,.06);
-  border:1px solid rgba(255,107,53,.2);
-  border-radius:12px;
-  padding:16px;
-  margin:14px 0;
-  display:none;
-}
-.dist-label{font-size:13px;color:#FFB088}
-.dist-value{font-size:22px;font-weight:bold;color:#FF6B35;margin-top:4px}
-.footer-note{font-size:13px;color:#5A6482;text-align:center;margin-top:20px;line-height:1.6}
+.info{margin-top:12px;line-height:1.8}
 .hide{display:none!important}
 </style>
 </head>
 <body>
 <div class="container">
-  <div class="header">
-    <div class="badge">✨ အဆင်ပြေပြီ</div>
-    <h1>တည်နေရာဖလှယ်ခြင်း</h1>
-    <p class="subtitle">လင့်ကို တစ်ချက်နှိပ်ရုံနဲ့ ကူးယူနိုင်ပြီ</p>
+  <h1>📍 တည်နေရာမျှဝေခြင်း</h1>
+
+  <button id="shareBtn" class="btn-main" onclick="getLocation()">⚡ ကျွန်ုပ်နေရာ မျှဝေမည်</button>
+
+  <!-- လမ်းညွှန်အကွက် -->
+  <div id="guideBox" class="box">
+    <div class="box-title">တည်နေရာရယူရန်</div>
+    <p>၁️⃣ ဖုန်းရဲ့ GPS ကို ဖွင့်ပါ</p>
+    <p>၂️⃣ ပေါ်လာတဲ့မေးခွန်းထဲက <b>"ခွင့်ပြုပါ"</b> ကို နှိပ်ပါ</p>
+    <p id="errMsg" style="color:#FF6B6B;margin-top:10px"></p>
   </div>
 
-  <div class="card">
-    <button id="shareBtn" class="btn btn-share" onclick="shareNow()">⚡ ကျွန်ုပ်နေရာ အမြန်မျှဝေမယ်</button>
-
-    <div id="permGuide" class="perm-box hide">
-      <div class="perm-title">📍 တည်နေရာရယူရန်</div>
-      <div class="perm-step">၁️⃣ ဖုန်းရဲ့ <b>GPS / တည်နေရာဝန်ဆောင်မှု</b> ကို ဖွင့်ပါ</div>
-      <div class="perm-step">၂️⃣ ပေါ်လာတဲ့မေးခွန်းထဲက <b>"ခွင့်ပြုပါ"</b> ကို နှိပ်ပါ</div>
-      <div class="perm-step">၃️⃣ လင့်ပေါ်လာမည် → <b>"လင့်ကူးယူမည်"</b> ကိုနှိပ်ပါ ✅</div>
-      <div id="errorMsg" class="error-text"></div>
-      <button id="retryBtn" class="btn-retry" onclick="shareNow()">🔄 ထပ်မံကြိုးစားမည်</button>
-    </div>
-
-    <!-- 🔗 လင့်အကွက် - ပြုပြင်ပြီး -->
-    <div id="linkBox" class="link-box">
-      <div class="link-label">👇 သင့်မျှဝေရန်လင့်</div>
-      <input id="linkInput" class="link-input" readonly>
-      <button id="copyBtn" class="btn-copy" onclick="copyLink()">📋 လင့်ကူးယူမည်</button>
-      <div id="successMsg" class="copy-success">✅ ကူးယူပြီးပါပြီ! သူ့ထံပို့လိုက်ပါ</div>
-    </div>
-
-    <div id="map"></div>
-
-    <div id="myCard" class="loc-card hide">
-      <div class="loc-label">🟢 ကျွန်ုပ်၏တည်နေရာ</div>
-      <div class="loc-name" id="myName"></div>
-      <div class="loc-coor" id="myCo"></div>
-    </div>
-
-    <div id="urCard" class="loc-card you hide">
-      <div class="loc-label">🔵 သူ၏တည်နေရာ</div>
-      <div class="loc-name" id="urName"></div>
-      <div class="loc-coor" id="urCo"></div>
-    </div>
-
-    <div id="distBox" class="dist-box hide">
-      <div class="dist-label">အကွာအဝေး</div>
-      <div class="dist-value" id="distValue"></div>
-    </div>
-
-    <p class="footer-note">💡 လင့်ကူးပြီးပါက မိတ်ဆွေထံ ပေးပို့လိုက်ပါ</p>
+  <!-- လင့်အကွက် -->
+  <div id="linkBox" class="box">
+    <div class="box-title">👇 သင့်လင့်</div>
+    <div id="linkDisplay" class="link-text"></div>
+    <p class="hint">💡 အပေါ်ကလင့်ကို ဖိထားပါ → ကူးယူပါ → မိတ်ဆွေထံပေးပို့ပါ</p>
   </div>
+
+  <!-- မြေပုံ + အချက်အလက် -->
+  <div id="map"></div>
+  <div id="myInfo" class="info hide"></div>
+  <div id="urInfo" class="info hide"></div>
+  <div id="distInfo" class="info hide"></div>
 </div>
 
 <script>
-let map, my={}, ur={}, mapReady=false;
-const STORAGE={ME:'loc_me', UR:'loc_ur'};
-
-function saveData(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-function loadData(k){try{const d=localStorage.getItem(k);return d?JSON.parse(d):null}catch(e){return null}}
+let map, mapReady=false;
+let myLat, myLon;
 
 window.onload=function(){
   const p=new URLSearchParams(location.search);
-  const la=p.get('lat')?parseFloat(p.get('lat')):null;
-  const lo=p.get('lon')?parseFloat(p.get('lon')):null;
-  const nm=p.get('place');
-
+  const la=p.get('lat');
+  const lo=p.get('lon');
   if(la && lo){
-    ur={la:la, lo:lo, name:nm};
-    saveData(STORAGE.UR, ur);
-    showUr();
-    if(!nm) fetchName(la, lo, 'ur');
-  } else {
-    const sUr=loadData(STORAGE.UR);
-    if(sUr){ ur=sUr; showUr(); if(!sUr.name) fetchName(sUr.la, sUr.lo, 'ur'); }
-  }
-
-  const sMe=loadData(STORAGE.ME);
-  if(sMe){
-    my=sMe;
-    showMy();
-    showLinkBox();
+    showOther(parseFloat(la), parseFloat(lo));
   }
 };
 
-async function shareNow(){
+function getLocation(){
   const btn=document.getElementById('shareBtn');
-  const guide=document.getElementById('permGuide');
-  const err=document.getElementById('errorMsg');
-  const retry=document.getElementById('retryBtn');
-  const linkBox=document.getElementById('linkBox');
-  const successMsg=document.getElementById('successMsg');
-
+  const guide=document.getElementById('guideBox');
+  const err=document.getElementById('errMsg');
+  
   btn.disabled=true;
   btn.innerText='စောင့်ပါ...';
-  guide.classList.remove('hide');
-  err.classList.add('hide');
-  retry.classList.add('hide');
-  linkBox.classList.add('hide');
-  successMsg.classList.add('hide');
+  guide.style.display='block';
+  err.innerText='';
 
   if(!navigator.geolocation){
-    err.innerText='❌ သင့်ဖုန်းက တည်နေရာမထောက်ပံ့ပါ။ Chrome သို့မဟုတ် Safari ဖြင့် ကြိုးစားပါ။';
-    err.classList.remove('hide');
-    retry.classList.remove('hide');
+    err.innerText='❌ GPS မတွေ့ပါ။ Chrome/Safari ဖြင့် ကြိုးစားပါ။';
     btn.disabled=false;
-    btn.innerText='⚡ အမြန်မျှဝေမယ်';
+    btn.innerText='⚡ ထပ်မံကြိုးစားမည်';
     return;
   }
 
-  try{
-    const pos=await new Promise((ok, no)=>{
-      navigator.geolocation.getCurrentPosition(ok, no, {enableHighAccuracy:true, timeout:15000});
-    });
-    my={
-      la: pos.coords.latitude,
-      lo: pos.coords.longitude,
-      name: null,
-      acc: Math.round(pos.coords.accuracy||0)
-    };
-    saveData(STORAGE.ME, my);
-
-    guide.classList.add('hide');
-    showMy();
-    genLink();
-    fetchName(my.la, my.lo, 'me');
-    renderMap(false);
-
-  }catch(e){
-    let msg='';
-    if(e.code===1) msg='❌ ခွင့်မပြုမိပါ။ လိပ်စာဘားရှိ 🔒 ကိုနှိပ်ပြီး တည်နေရာကို ခွင့်ပြုပေးပါ။';
-    else if(e.code===2) msg='❌ GPS အချက်ပြမရပါ။ ဖုန်းဆက်တင်များမှ GPS/တည်နေရာကို ဖွင့်ပေးပါ။';
-    else if(e.code===3) msg='⏳ အချိန်ကုန်သွားပါတယ်။ ပွင့်လင်းနေရာတွင် ထပ်မံကြိုးစားပါ။';
-    else msg='❌ မအောင်မြင်ပါ။ GPS ဖွင့်ပြီး ထပ်ကြိုးစားပါ။';
-    err.innerText=msg;
-    err.classList.remove('hide');
-    retry.classList.remove('hide');
-  }
-
-  btn.disabled=false;
-  btn.innerText='⚡ အမြန်မျှဝေမယ်';
+  navigator.geolocation.getCurrentPosition(
+    function(pos){
+      myLat=pos.coords.latitude;
+      myLon=pos.coords.longitude;
+      
+      guide.style.display='none';
+      showLink();
+      showMyOnMap();
+      
+      btn.disabled=false;
+      btn.innerText='⚡ ကျွန်ုပ်နေရာ မျှဝေမည်';
+    },
+    function(e){
+      let msg='';
+      if(e.code===1) msg='❌ ခွင့်မပြုမိပါ။ လိပ်စာဘားရှိ 🔒 → တည်နေရာ → ခွင့်ပြု';
+      else if(e.code===2) msg='❌ GPS အချက်ပြမရပါ။ ဖုန်းဆက်တင်များမှ GPS ဖွင့်ပါ';
+      else msg='❌ မအောင်မြင်ပါ။ ပွင့်လင်းနေရာတွင် ထပ်ကြိုးစားပါ';
+      err.innerText=msg;
+      btn.disabled=false;
+      btn.innerText='⚡ ထပ်မံကြိုးစားမည်';
+    },
+    {enableHighAccuracy:true, timeout:15000}
+  );
 }
 
-function genLink(name=''){
+function showLink(){
   const base=location.href.split('?')[0];
-  const fullLink=`${base}?lat=${my.la}&lon=${my.lo}${name?'&place='+encodeURIComponent(name):''}`;
-  document.getElementById('linkInput').value=fullLink;
-  showLinkBox();
+  const link=base+'?lat='+myLat+'&lon='+myLon;
+  document.getElementById('linkDisplay').innerText=link;
+  document.getElementById('linkBox').style.display='block';
 }
 
-function showLinkBox(){
-  document.getElementById('linkBox').classList.remove('hide');
+function showMyOnMap(){
+  initMap(myLat, myLon);
+  L.marker([myLat, myLon]).addTo(map).bindPopup('ကျွန်ုပ်');
+  document.getElementById('myInfo').innerHTML='🟢 ကျွန်ုပ်နေရာ: '+myLat.toFixed(5)+', '+myLon.toFixed(5);
+  document.getElementById('myInfo').classList.remove('hide');
 }
 
-// ✅ ကူးယူခြင်း - နည်းလမ်းအမျိုးမျိုးဖြင့် ကြိုးစား
-async function copyLink(){
-  const input=document.getElementById('linkInput');
-  const successMsg=document.getElementById('successMsg');
-  const text=input.value;
-
-  successMsg.classList.add('hide');
-
-  // နည်းလမ်း ၁ - Clipboard API
-  try{
-    await navigator.clipboard.writeText(text);
-    successMsg.classList.remove('hide');
-    setTimeout(()=>successMsg.classList.add('hide'), 3000);
-    return;
-  }catch(e){}
-
-  // နည်းလမ်း ၂ - အလိုအလျောက်ရွေးပေးပြီး ကူးခိုင်း
-  try{
-    input.select();
-    input.setSelectionRange(0, input.value.length);
-    const copied=document.execCommand('copy');
-    if(copied){
-      successMsg.classList.remove('hide');
-      setTimeout(()=>successMsg.classList.add('hide'), 3000);
-      return;
-    }
-  }catch(e){}
-
-  // နည်းလမ်း ၃ - ကိုယ်တိုင်ကူးခိုင်း
-  input.select();
-  alert('လင့်ကို အောက်ကနေ်ကူးယူပါ- \n\n'+text);
+function showOther(la, lo){
+  initMap(la, lo);
+  L.marker([la, lo]).addTo(map).bindPopup('သူ့နေရာ');
+  document.getElementById('urInfo').innerHTML='🔵 သူ့နေရာ: '+la.toFixed(5)+', '+lo.toFixed(5);
+  document.getElementById('urInfo').classList.remove('hide');
+  
+  if(myLat){
+    L.polyline([[myLat,myLon],[la,lo]], {color:'#FF6B35', weight:4}).addTo(map);
+    map.fitBounds([[myLat,myLon],[la,lo]], {padding:[30,30]});
+    showDistance(myLat,myLon,la,lo);
+  }
 }
 
-async function fetchName(la, lo, who){
-  try{
-    const r=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${la}&lon=${lo}&zoom=14&format=json&accept-language=my,en`);
-    if(!r.ok) return;
-    const d=await r.json();
-    const a=d.address;
-    let nm=a.village||a.town||a.city||a.district||'မြန်မာနိုင်ငံ';
-    if(a.state) nm+=`, ${a.state}`;
-
-    if(who==='me'){
-      my.name=nm;
-      document.getElementById('myName').innerText='📍 '+nm;
-      document.getElementById('myCo').innerText=`${my.la.toFixed(5)}, ${my.lo.toFixed(5)} · တိကျမှု ${my.acc} မီတာ`;
-      saveData(STORAGE.ME, my);
-      genLink(nm);
-    }else{
-      ur.name=nm;
-      document.getElementById('urName').innerText='📍 '+nm;
-      saveData(STORAGE.UR, ur);
-      if(my.la) calcDist();
-    }
-  }catch(e){}
+function initMap(la, lo){
+  document.getElementById('map').style.display='block';
+  if(!mapReady){
+    map=L.map('map').setView([la, lo], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    mapReady=true;
+  }
 }
 
-function renderMap(both){
-  const mapEl=document.getElementById('map');
-  mapEl.style.display='block';
-
-  setTimeout(()=>{
-    if(!mapReady){
-      const centerLat=my.la||ur.la||21.0;
-      const centerLon=my.lo||ur.lo||96.0;
-      map=L.map('map').setView([centerLat, centerLon], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-        attribution:'© OpenStreetMap',
-        maxZoom:19
-      }).addTo(map);
-      mapReady=true;
-    }
-
-    map.eachLayer(layer=>{ if(layer instanceof L.Marker || layer instanceof L.Polyline) map.removeLayer(layer); });
-
-    if(my.la){
-      L.marker([my.la, my.lo]).addTo(map).bindPopup('ကျွန်ုပ်');
-      map.setView([my.la, my.lo], 13);
-    }
-
-    if(both && ur.la){
-      L.marker([ur.la, ur.lo]).addTo(map).bindPopup('သူ့နေရာ');
-      L.polyline([[my.la,my.lo],[ur.la,ur.lo]], {color:'#FF6B35', weight:4}).addTo(map);
-      map.fitBounds([[my.la,my.lo],[ur.la,ur.lo]], {padding:[30,30]});
-      calcDist();
-    }
-  }, 50);
-}
-
-function showMy(){
-  document.getElementById('myCard').classList.remove('hide');
-}
-function showUr(){
-  document.getElementById('urCard').classList.remove('hide');
-  if(my.la){ renderMap(true); }
-}
-function calcDist(){
-  if(!my.la || !ur.la) return;
-  const d=getDist(my.la,my.lo,ur.la,ur.lo);
-  document.getElementById('distBox').classList.remove('hide');
-  document.getElementById('distValue').innerText=d<1000 ? `${Math.round(d)} မီတာ` : `${(d/1000).toFixed(2)} ကီလိုမီတာ`;
-}
-function getDist(l1,o1,l2,o2){
+function showDistance(l1,o1,l2,o2){
   const R=6371000;
   const p=Math.PI/180;
   const a=Math.sin((l2-l1)*p/2)**2 + Math.cos(l1*p)*Math.cos(l2*p)*Math.sin((o2-o1)*p/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const d=R*2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  let text='အကွာအဝေး: ';
+  if(d<1000) text+=Math.round(d)+' မီတာ';
+  else text+=(d/1000).toFixed(2)+' ကီလိုမီတာ';
+  document.getElementById('distInfo').innerText=text;
+  document.getElementById('distInfo').classList.remove('hide');
 }
 </script>
 </body>
-</html>
+  </html>
+  
